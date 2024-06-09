@@ -12,7 +12,40 @@ logger = logging.getLogger(__file__)
 
 
 def get_product_list(last_id, client_id, seller_token):
-    """Получить список товаров магазина озон"""
+    """Получить список товаров магазина озон.
+
+    Args:
+        last_id (str): id товара.
+        client_id (str): id клиента.
+        seller_token (str): Токен продавца.
+
+    Returns:
+        list: Список содержащий информацию о товарах.
+
+    Examples:
+
+         >>> print(get_product_list(' ', 'id_клиента', 'токен-продавца'))
+          [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты last_id, client_id, seller_token не являются строками.
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     url = "https://api-seller.ozon.ru/v2/product/list"
     headers = {
         "Client-Id": client_id,
@@ -32,7 +65,28 @@ def get_product_list(last_id, client_id, seller_token):
 
 
 def get_offer_ids(client_id, seller_token):
-    """Получить артикулы товаров магазина озон"""
+    """Получить артикулы товаров магазина озон.
+
+    Args:
+        client_id (str): id клиента.
+        seller_token (str): Токен продавца.
+
+    Returns:
+        list: Список содержащий артикулы товаров.
+
+    Examples:
+
+         >>> print(get_offer_ids(client_id, seller_token))
+         [
+             'артикул_1',
+             'артикул_2',
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты client_id, seller_token не являются строками.
+
+    """
     last_id = ""
     product_list = []
     while True:
@@ -49,7 +103,31 @@ def get_offer_ids(client_id, seller_token):
 
 
 def update_price(prices: list, client_id, seller_token):
-    """Обновить цены товаров"""
+    """Обновить цены товаров.
+
+    Args:
+        prices (list): Список цен.
+        client_id (str): id клиента.
+        seller_token (str): Токен продавца.
+
+    Returns:
+        list: Список содержащий новую цену на товары.
+
+    Examples:
+
+         >>> print(update_price(prices, client_id, seller_token))
+         [
+         нщвая_цена_1,
+         новая_цена_2,
+         ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты client_id, seller_token не являются строками,
+                        prices не является списком.
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     url = "https://api-seller.ozon.ru/v1/product/import/prices"
     headers = {
         "Client-Id": client_id,
@@ -62,7 +140,41 @@ def update_price(prices: list, client_id, seller_token):
 
 
 def update_stocks(stocks: list, client_id, seller_token):
-    """Обновить остатки"""
+    """Обновить остатки.
+
+    Args:
+        stocks (list): Список остатков товаров.
+        client_id (str): id клиента.
+        seller_token (str): Токен продавца.
+
+    Returns:
+        list: Список содержащий обновленные данные о товарах.
+
+    Examples:
+
+        >>> print(update_stocks(stocks, client_id, seller_token))
+        [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты client_id, seller_token не являются строками,
+                        stocks не являутся списком.
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     url = "https://api-seller.ozon.ru/v1/product/import/stocks"
     headers = {
         "Client-Id": client_id,
@@ -75,7 +187,34 @@ def update_stocks(stocks: list, client_id, seller_token):
 
 
 def download_stock():
-    """Скачать файл ostatki с сайта casio"""
+    """Скачать файл ostatki с сайта casio.
+
+    Returns:
+        dict: Список содезжащий информацию об остатках часов.
+
+    Examples:
+
+         >>> print(download_stock())
+          [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     # Скачать остатки с сайта
     casio_url = "https://timeworld.ru/upload/files/ostatki.zip"
     session = requests.Session()
@@ -96,6 +235,38 @@ def download_stock():
 
 
 def create_stocks(watch_remnants, offer_ids):
+    """Обновить остатки.
+
+    Args:
+        watch_remnants (list): Список содержащий информацию об остатках часов.
+        offer_ids (list): Список артикулов товаров выставленных на Озон.
+
+    Returns:
+        list: Список содезжащий обновленную информацию об остатках часов.
+
+    Examples:
+
+         >>> print(create_stocks(watch_remnants, offer_ids))
+                   [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты watch_remnants, offer_ids не являются списками.
+
+    """
     # Уберем то, что не загружено в seller
     stocks = []
     for watch in watch_remnants:
@@ -116,6 +287,40 @@ def create_stocks(watch_remnants, offer_ids):
 
 
 def create_prices(watch_remnants, offer_ids):
+    """Создать цены на товары.
+
+    Args:
+        watch_remnants (list): Список содержащий информацию об остатках часов.
+        offer_ids (list): Список артикулов товаров выставленных на Озон.
+
+    Returns:
+        list: Список содержащий информацию о новых ценах на товары.
+
+    Examples:
+
+         >>> print(create_stocks(watch_remnants, offer_ids))
+                   [
+             {
+                "auto_action_enabled": некоторое_значение,
+                "currency_code": некоторое_значение,
+                "offer_id": некоторое_значение,
+                "old_price": некоторое_значение,
+                "price": некоторое_значение,
+             },
+              {
+                "auto_action_enabled": некоторое_значение,
+                "currency_code": некоторое_значение,
+                "offer_id": некоторое_значение,
+                "old_price": некоторое_значение,
+                "price": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты watch_remnants, offer_ids не являются списками.
+
+    """
     prices = []
     for watch in watch_remnants:
         if str(watch.get("Код")) in offer_ids:
@@ -131,12 +336,29 @@ def create_prices(watch_remnants, offer_ids):
 
 
 def price_conversion(price: str) -> str:
-    """Преобразовать цену. Пример: 5'990.00 руб. -> 5990"""
+    """Преобразовать цену.
+
+    Args:
+        price (str): Строка содержащая цену товара с точкой.
+
+    Returns:
+        str: Строка содержащая целое число.
+
+    Examples:
+
+         >>> print(price_conversion('5990.00 руб.'))
+         5900
+
+    Raises:
+        AttributeError: Если атрибут price не является строкой.
+
+    """
     return re.sub("[^0-9]", "", price.split(".")[0])
 
 
 def divide(lst: list, n: int):
-    """Разделить список lst на части по n элементов"""
+    """Разделить список lst на части по n элементов."""
+
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
