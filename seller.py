@@ -24,7 +24,7 @@ def get_product_list(last_id, client_id, seller_token):
 
     Examples:
 
-         >>> print(get_product_list(' ', 'id_клиента', 'токен-продавца'))
+         >>> print(get_product_list(' ', client_id, seller_token))
           [
              {
              "items": некоторое_значение,
@@ -190,7 +190,7 @@ def download_stock():
     """Скачать файл ostatki с сайта casio.
 
     Returns:
-        dict: Список содезжащий информацию об остатках часов.
+        list: Список содезжащий информацию об остатках часов.
 
     Examples:
 
@@ -235,7 +235,7 @@ def download_stock():
 
 
 def create_stocks(watch_remnants, offer_ids):
-    """Обновить остатки.
+    """Сформировать список остатков.
 
     Args:
         watch_remnants (list): Список содержащий информацию об остатках часов.
@@ -299,7 +299,7 @@ def create_prices(watch_remnants, offer_ids):
     Examples:
 
          >>> print(create_stocks(watch_remnants, offer_ids))
-                   [
+        [
              {
                 "auto_action_enabled": некоторое_значение,
                 "currency_code": некоторое_значение,
@@ -307,7 +307,7 @@ def create_prices(watch_remnants, offer_ids):
                 "old_price": некоторое_значение,
                 "price": некоторое_значение,
              },
-              {
+             {
                 "auto_action_enabled": некоторое_значение,
                 "currency_code": некоторое_значение,
                 "offer_id": некоторое_значение,
@@ -315,7 +315,7 @@ def create_prices(watch_remnants, offer_ids):
                 "price": некоторое_значение,
              },
              ...
-         ]
+        ]
 
     Raises:
         AttributeError: Если атрибуты watch_remnants, offer_ids не являются списками.

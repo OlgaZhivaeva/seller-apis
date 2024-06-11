@@ -11,6 +11,40 @@ logger = logging.getLogger(__file__)
 
 
 def get_product_list(page, campaign_id, access_token):
+    """Получить список товаров с Яндекс Маркета.
+
+    Args:
+        page (str): Токен страницы.
+        campaign_id (str): Идентификатор кампании.
+        access_token (str): Токен доступа.
+
+    Returns:
+        list: Список содержащий информацию о продаваемых на Яндекс Маркете товарах.
+
+    Examples:
+
+         >>> print(get_product_list(page, campaign_id, access_token))
+         [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты page, campaign_id, access_token не являются строками.
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
         "Content-Type": "application/json",
@@ -30,6 +64,41 @@ def get_product_list(page, campaign_id, access_token):
 
 
 def update_stocks(stocks, campaign_id, access_token):
+    """Обновить остатки товаров.
+
+     Args:
+         stocks (list): Список содержащий информацию об остатках товаров.
+         campaign_id (str): Идентификатор кампании.
+         access_token (str): Токен доступа.
+
+     Returns:
+         list: Список содержащий обновленную информацию об остатках товаров.
+
+    Examples:
+
+         >>> print(update_stocks(stocks, campaign_id, access_token))
+         [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты campaign_id, access_token не являются строками.
+                        stocks не является списком.
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
         "Content-Type": "application/json",
@@ -46,6 +115,31 @@ def update_stocks(stocks, campaign_id, access_token):
 
 
 def update_price(prices, campaign_id, access_token):
+    """Обновить цену.
+
+    Args:
+        prices (list): Список цен.
+        campaign_id (str): Идентификатор кампании.
+        access_token (str): Токен доступа.
+
+        Returns:
+        list: Список содержащий новую цену на товары.
+
+    Examples:
+
+         >>> print(update_price(prices, campaign_id, access_token))
+         [
+         нщвая_цена_1,
+         новая_цена_2,
+         ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты campaign_id, access_token не являются строками,
+                        prices не является списком.
+        HTTPError: Если произошла ошибка при выполнении запроса.
+
+    """
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
         "Content-Type": "application/json",
@@ -62,7 +156,28 @@ def update_price(prices, campaign_id, access_token):
 
 
 def get_offer_ids(campaign_id, market_token):
-    """Получить артикулы товаров Яндекс маркета"""
+    """Получить артикулы товаров Яндекс маркета.
+
+    Args:
+        campaign_id (str): Идентификатор кампании.
+        market_token (str): Токен доступа.
+
+    Returns:
+          list: Список содержащий артикулы товаров.
+
+    Examples:
+
+         >>> print(get_offer_ids(campaign_id, market_token))
+         [
+             'артикул_1',
+             'артикул_2',
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты campaign_id, market_token не являются строками.
+
+    """
     page = ""
     product_list = []
     while True:
@@ -78,6 +193,40 @@ def get_offer_ids(campaign_id, market_token):
 
 
 def create_stocks(watch_remnants, offer_ids, warehouse_id):
+    """Сформировать список остатков.
+
+    Args:
+        watch_remnants (list): Список содезжащий информацию об остатках часов.
+        offer_ids (str): Список содержащий артикулы товаров.
+        warehouse_id (str): id склада.
+
+    Returns:
+          list: Список содезжащий обновленную информацию об остатках часов.
+
+    Examples:
+
+         >>> print(create_stocks(watch_remnants, offer_ids, warehouse_id)
+         [
+             {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+              {
+             "items": некоторое_значение,
+             "total": некоторое_значение,
+             "price": некоторое_значение,
+             "offer_id": некоторое_значение,
+             },
+             ...
+         ]
+
+    Raises:
+        AttributeError: Если атрибуты offer_ids, warehouse_id не являются строками,
+                        watch_remnants не является списком.
+
+    """
     # Уберем то, что не загружено в market
     stocks = list()
     date = str(datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z")
@@ -123,6 +272,40 @@ def create_stocks(watch_remnants, offer_ids, warehouse_id):
 
 
 def create_prices(watch_remnants, offer_ids):
+    """Создать цены на товары.
+
+    Args:
+        watch_remnants (list): Список содержащий информацию об остатках часов.
+        offer_ids (list): Список артикулов товаров выставленных на Озон.
+
+    Returns:
+        list: Список содержащий информацию о новых ценах на товары.
+
+    Examples:
+
+        >>> print(create_stocks(watch_remnants, offer_ids))
+        [
+             {
+                "id": некоторое_значение,
+                "price":{
+                    "value":некоторое_значение,
+                    "currencyId": "RUR"
+                }
+             },
+             {
+                "id": некоторое_значение,
+                "price":{
+                    "value":некоторое_значение,
+                    "currencyId": "RUR"
+                }
+             },
+             ...
+        ]
+
+    Raises:
+        AttributeError: Если атрибуты watch_remnants, offer_ids не являются списками.
+
+    """
     prices = []
     for watch in watch_remnants:
         if str(watch.get("Код")) in offer_ids:
